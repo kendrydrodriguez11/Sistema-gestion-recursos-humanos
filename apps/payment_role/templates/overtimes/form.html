@@ -1,0 +1,78 @@
+{% extends "components/base_transaction.html" %}
+{% load static %}
+{% block controls %}
+	<div class="circle-icon fs-2 btn btn" data-bs-toggle="tooltip" 
+			data-bs-title="Por favor, ingrese los datos requeridos."> 
+		<i class="bi bi-question"></i>
+	</div>
+	<div class="row mb-3">
+		<div class="col-md-3">
+			{% include "components/field.html" with field=form.calendar %}
+		</div>
+		<div class="col-md-3">
+			{% include "components/field.html" with field=form.employee %}
+		</div>
+		<div class="col-md-3">
+			{% include "components/field.html" with field=form.value_hour %}
+		</div>
+		<div class="col-md-3">
+			{% include "components/field.html" with field=form.sucursal %}
+		</div>
+	</div>
+	<div class="row mb-3">
+		<div class="col-md-3 ">
+			<label for="opciones" class="form-label">Tipo de Horas</label>
+			<select name="type_hours" id="type_hours" class="form-control">
+				{% for hour in hours%}
+					<option data-value="{{hour.value}}" value="{{hour.id}}">{{hour.name_short}}</option>
+				{% endfor %}
+			</select>
+			
+		</div>
+    	<div class="col-md-3 ">
+			{% comment %} {% include "components/field.html" with field=form.nume_hours %} {% endcomment %}
+	        <label for="id_nume_huors" class="form-label">Numero Horas</label>
+            <input type="number" class="form-control" name="nume_hours" id="id_nume_hours" placeholder="Ingrese el número de horas">
+    
+		</div>
+		<div class="col-md-4 mt-4">
+			<button class="btn btn-nuevo text-white fw-bold fs-4" type="button" id="btnadd">
+              Add Horas
+    		</button>	 
+		</div>
+		<div class="col-md-2 mt-5 text-danger" style="font-size:16px;text-transform: uppercase;">
+			{% include "components/field.html" with field=form.total %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block detalle %}
+ <section class="table-responsive" style="margin-top:-35px;margin-bottom: -35px;">
+     <table class="table table-hover table-fluid " id="tableOvertime">
+      <thead class="text-center border-4 custom-header-rounded   ">
+        <tr class="text-info"> 
+			<th class="text-info">IdHoras</th> 
+			<th class="text-info">Descripcion</th>
+			<th class="text-info">Factor</th>
+			<th class="text-info">NoHoras</th>
+			<th class="text-info">Valor</th>
+			<th class="text-danger">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="detalle" class="text-center">
+       
+      </tbody>
+     </table>
+  </section>
+{% endblock %}
+
+{% block file_js %}
+  <script>
+	 var backUrl = "{{back_url}}"
+	 var detail_hours = JSON.parse("{{ detail_hours|escapejs }}")
+	 console.log("detalle horas")
+	 console.log(detail_hours)
+  </script> 
+  <script src="{% static 'overtimes/overtime.js' %}"></script>
+  
+{% endblock %}

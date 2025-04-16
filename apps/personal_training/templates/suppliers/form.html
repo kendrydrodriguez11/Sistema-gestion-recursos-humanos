@@ -1,0 +1,9 @@
+{% extends "components/base_form.html" %}
+{% load crispy_forms_tags %}
+{% block controls %}
+      <div class="circle-icon fs-2 btn btn" data-bs-toggle="tooltip" 
+           data-bs-title="Por favor, ingrese un nombre descriptivo para el menú y el nombre del icono correspondiente. El nombre del menú puede ser algo como 'Principal', 'Configuración', etc. El icono que debes ingresar es de bootstrap 5.3 y debe ser el nombre del ícono que desea usar , por ejemplo, bi bi-menu-button-wide-fill de menu."> 
+           <i class="bi bi-question"></i>
+        </div>
+      {{form|crispy}}
+{% endblock %}

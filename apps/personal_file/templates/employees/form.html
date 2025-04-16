@@ -1,0 +1,9 @@
+{% extends "components/base_form.html" %}
+{% load crispy_forms_tags %}
+{% block controls %}
+      <div class="circle-icon fs-2 btn btn" data-bs-toggle="tooltip" 
+           data-bs-title="Por favor, ingrese un nombre y apellidos y demas detos del empleado."> 
+           <i class="bi bi-question"></i>
+      </div>
+      {{form|crispy}}
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "components/base_transaction.html" %}
+{% load static %}
+{% block controls %}
+<div class="circle-icon fs-2 btn btn" data-bs-toggle="tooltip" data-bs-title="Por favor, ingrese los datos requeridos."> 
+	<i class="bi bi-question"></i>
+</div>
+<div class="row mb-3">
+    <div class="col-md-3">
+        {% include "components/field.html" with field=form.cliente %}
+    </div>
+    <div class="col-md-3">
+        {% include "components/field.html" with field=form.fecha %}
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-md-3 ">
+        <label for="id_producto" class="form-label">Producto</label>
+        <select name="producto" id="id_producto" class="form-select">
+            <option value="" selected>Seleccione un producto</option>
+            {% for producto in productos %}
+                <option data-stock="{{producto.stock}}" data-value="{{producto.precio}}" value="{{ producto.id }}">{{ producto.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="id_cantidad" class="form-label">Cantidad</label>
+        <input type="number" name="cantidad" id="id_cantidad" class="form-control" placeholder="Ingrese la cantidad">
+    </div>
+    <div class="col-md-3">
+        <button type="button" class="btn btn-primary" id="btnAgregar">Agregar</button>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-md-3">
+        {% include "components/field.html" with field=form.subtotal %}
+    </div>
+    <div class="col-md-3">
+        {% include "components/field.html" with field=form.iva %}
+    </div>
+    <div class="col-md-3">
+        {% include "components/field.html" with field=form.total %}
+    </div>
+</div>
+{% endblock %}
+{% block detalle %}
+<section class="table-responsive" style="margin-top:-35px;margin-bottom: -35px;">
+    <table class="table table-hover table-fluid " id="tableOvertime">
+     <thead class="text-center border-4 custom-header-rounded   ">
+       <tr class="text-info"> 
+           <th class="text-info">Id</th> 
+           <th class="text-info">Producto</th>
+           <th class="text-info">Cantidad</th>
+           <th class="text-info">Precio</th>
+           <th class="text-info">Subtotal</th>
+           <th class="text-danger">Acciones</th>
+       </tr>
+     </thead>
+     <tbody id="detalle" class="text-center">
+     </tbody>
+    </table>
+ </section>
+{% endblock %}
+
+{% block file_js %}
+<script>
+    var backUrl = "{{back_url}}"
+    var detail_producto = JSON.parse("{{ detail_producto|escapejs }}")
+</script>
+<script src="{% static 'facturas/factura.js' %}"></script>
+{% endblock %}

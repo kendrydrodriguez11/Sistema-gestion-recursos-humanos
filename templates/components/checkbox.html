@@ -1,0 +1,12 @@
+{% load security_extras %}
+{% load widget_tweaks %}
+
+<section class="form-check">
+   <label class="form-check-label fw-bold" for="{{ field.id_for_label }}">
+    {{ field.label }}
+    {{ field|add_class:"form-check-input" }}
+    <div class="invalid-feedback">
+        {{ field.errors }}
+    </div>
+ </label>
+</section>   

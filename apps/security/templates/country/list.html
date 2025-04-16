@@ -1,0 +1,45 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+   <form action="" style="max-width: 450px;">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar por nombre " name="q1" value="{{ request.GET.q1 }}">
+            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Escriba parte del nombre y click en buscar">
+                Buscar
+            </button>
+        </div>
+    </form>           
+{% endblock search %}
+{% block columns %}
+    <tr class="text-primary"> 
+        <th class="text-primary">Pais</th>
+        <th class="text-primary">Estado</th>
+        <th class="text-danger">Acciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+  
+    {% for country in countries %}
+        <tr>
+            <td>{{country.name|upper}}</td>
+            <td>{{country.state}}</td>
+            <td class="text-center ">
+                <a class="text-success" href="{% url 'security:country_update' country.id %}" data-bs-toggle="tooltip" data-bs-title="Editar el pais"><i class="bi bi-pencil-fill"></i></a>
+                <a class="text-danger" href="{% url 'security:country_delete' country.id %}" data-bs-toggle="tooltip" data-bs-title="Eliminar el pais"><i class="bi bi-x-circle-fill"></i></a>
+            </td>
+        </tr>
+   
+        {% empty %}
+       <tr>
+            <td colspan="2" class="text-danger fw-bold h3 text-center">
+                <div class="py-2 mt-2 border border-1 shadow rounded text-center">
+                    ¡No se encontraron datos que cumplan los criterios de búsqueda...!
+                </div>   
+            </td>
+        </tr>
+    {% endfor%}  
+{% endblock %}
+
+
+

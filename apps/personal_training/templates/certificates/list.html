@@ -1,0 +1,53 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+   <form action="" style="max-width: 450px;">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar por nombre " name="q1" value="{{ request.GET.q1 }}">
+            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Escriba parte del nombre y click en buscar">
+                Buscar
+            </button>
+        </div>
+    </form>           
+{% endblock search %}
+{% block columns %}
+    <tr class="text-primary"> 
+        <th class="text-primary">Empleado</th>
+        <th class="text-primary">Curso</th>
+        <th class="text-primary">Nota</th>
+        <th class="text-primary">Acciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+  
+    {% for certificate in certificates %}
+        <tr>
+            <td class="text-center">{{certificate.employee|upper}}</td>
+            <td class="text-center">{{certificate.course}}</td>
+            <td class="text-center">{{certificate.note}}</td>
+            <td class="text-center ">
+                {% if permissions.certificate_view_pdf %}
+                    <a class="text-info" target="_blank" href="{% url 'personal_training:certificate_view' certificate.id %}" data-bs-toggle="tooltip" data-bs-title="Ver"><i class="bi bi-file-earmark-pdf-fill"></i></a>
+                {% endif %}
+                {% if permissions.change_certificate %}
+                     <a class="text-success" href="{% url 'personal_training:certificate_update' certificate.id %}" data-bs-toggle="tooltip" data-bs-title="Editar el certificate"><i class="bi bi-pencil-fill"></i></a>
+                {% endif %}
+                {% if permissions.delete_certificate %}
+                     <a class="text-danger" href="{% url 'personal_training:certificate_delete' certificate.id %}" data-bs-toggle="tooltip" data-bs-title="Eliminar el certificate"><i class="bi bi-x-circle-fill"></i></a>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+       <tr>
+            <td colspan="2" class="text-danger fw-bold h3 text-center">
+                <div class="py-2 mt-2 border border-1 shadow rounded text-center">
+                    ¡No se encontraron datos que cumplan los criterios de búsqueda...!
+                </div>   
+            </td>
+        </tr>
+    {% endfor%}  
+{% endblock %}
+
+
+

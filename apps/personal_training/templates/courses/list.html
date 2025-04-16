@@ -1,0 +1,53 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+   <form action="" style="max-width: 450px;">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar por nombre " name="q1" value="{{ request.GET.q1 }}">
+            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Escriba parte del nombre y click en buscar">
+                Buscar
+            </button>
+        </div>
+    </form>           
+{% endblock search %}
+{% block columns %}
+    <tr class="text-primary"> 
+        <th class="text-primary">Nombre del Curso</th>
+        <th class="text-primary">Descripcion</th>
+        <th class="text-danger">Acciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+    {% for course in courses %}
+        <tr>
+            <td>{{course.name|upper}}</td>
+            <td>{{course.description}}</td>
+            <td class="text-center ">
+                 {% if permissions.add_application%}
+                    <a class="text-info" href="{% url 'personal_training:application_create_by_curse' course.id %}" data-bs-toggle="tooltip" data-bs-title="Solicitar"><i class="bi bi-send-plus"></i></a>
+                 {% endif%}
+                 {% if permissions.add_certificate%}
+                    <a class="text-warning" href="{% url 'personal_training:certificate_create_by_curse' course.id %}" data-bs-toggle="tooltip" data-bs-title="Subir certificado"><i class="bi bi-file-arrow-down"></i></a>
+                 {% endif%}
+                 {% if permissions.change_course %}
+                     <a class="text-success" href="{% url 'personal_training:course_update' course.id %}" data-bs-toggle="tooltip" data-bs-title="Editar el course"><i class="bi bi-pencil-fill"></i></a>
+                 {% endif %}
+                 {% if permissions.delete_course %}
+                     <a class="text-danger" href="{% url 'personal_training:course_delete' course.id %}" data-bs-toggle="tooltip" data-bs-title="Eliminar el course"><i class="bi bi-x-circle-fill"></i></a>
+                 {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+       <tr>
+            <td colspan="2" class="text-danger fw-bold h3 text-center">
+                <div class="py-2 mt-2 border border-1 shadow rounded text-center">
+                    ¡No se encontraron datos que cumplan los criterios de búsqueda...!
+                </div>   
+            </td>
+        </tr>
+    {% endfor%}  
+{% endblock %}
+
+
+

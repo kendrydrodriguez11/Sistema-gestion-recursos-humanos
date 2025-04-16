@@ -1,0 +1,57 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+   <form action="" style="max-width: 450px;">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar por nombre" name="q1" value="{{ request.GET.q1 }}">
+            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Escriba parte del nombre y dar click en buscar">
+                Buscar
+            </button>
+        </div>
+    </form>           
+{% endblock search %}
+{% block columns %}
+    <tr > 
+        <th>Foto</th>
+        <th>Razon Social</th>
+        <th>Matriz</th>
+        <th>Ruc</th>
+        <th>Direccion</th>
+        <th>Telefono</th>
+        <th>Email</th>
+        <th class="text-danger">Acciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+    {% for item in organizations %}
+        <tr>
+            <td><img src="{{item.get_image_url}}" width="50px"/></td>
+            <td>{{item.name|upper}}</td>
+            {% if item.matriz %}
+            <td class="text-center text-primary fs-3"><i class='bx bxs-check-circle'></i></td>
+            {% else%}
+            <td class="text-center text-danger fs-3"><i class='bx bxs-checkbox-minus'></i></td>
+            {% endif %}
+            <td>{{item.ruc}}</td>
+            <td>{{item.direction}}</td>
+            <td>{{item.phone}}</td>
+            <td>{{item.email}}</td>
+            <td class="text-center ">
+            {% if permissions.change_organization %}
+                <a class="text-success fs-4" href="{% url 'core:organization_update' item.id %}" data-bs-toggle="tooltip" data-bs-title="Editar la sucursal"><i class="bi bi-pencil-fill"></i></a>
+            {% endif %}
+            {% if permissions.delete_organization %}
+                <a class="text-danger fs-4" href="{% url 'core:organization_delete' item.id %}" data-bs-toggle="tooltip" data-bs-title="Eliminar la sucursal"><i class="bi bi-x-circle-fill"></i></a>
+            {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+           {% include "components/empty.html" %}
+    {% endfor%}  
+{% endblock %}
+
+
+
+
+

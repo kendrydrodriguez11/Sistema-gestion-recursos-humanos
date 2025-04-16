@@ -1,0 +1,13 @@
+{% load security_extras %}
+{% load widget_tweaks %}
+
+<section class="form-group">
+   <label class="control-label fw-bold" for="{{ field.id_for_label }}">
+      {{ field.label }}:
+   </label>
+   {{ field|add_class:"form-control" }}
+ 
+   <div class="invalid-feedback">
+       {{ field.errors }}
+   </div>
+</section>

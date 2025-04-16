@@ -1,0 +1,29 @@
+{% extends "components/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+ <section id="portfolio" class=" container portfolio section-bg" data-aos="fade-up" data-aos-delay="100">
+    <div class="section-title">
+        <h2 style="margin-left:-7px;">Mantenimiento {{title}}</h2>
+    </div>
+   {% include "components/error.html" %}
+  
+    <form method="POST" enctype="multipart/form-data" class="m-4" id="form-container"> 
+      
+        {% csrf_token %}
+        {% block controls %} {% endblock %}
+         
+    </form>
+    {% block detalle %}
+
+    {% endblock %}
+    {% block buttons %} 
+            <button class="btn btn-primary btn-nuevo" type="submit" form="form-container" >
+                {{grabar}}
+            </button>
+            <a class="btn btn-outline-danger ms-2" href="{{ back_url }}">Cancelar</a>
+    {% endblock %}
+ </section>
+{% endblock content %}
+
+   

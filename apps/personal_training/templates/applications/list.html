@@ -1,0 +1,215 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+{% load crispy_forms_tags %}
+<form action="" style="max-width: 450px;">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Buscar" name="q1" value="{{ request.GET.q1 }}">
+        <button class="btn btn-outline-danger" data-bs-toggle="tooltip"
+            data-bs-title="Escriba parte del nombre y click en buscar">
+            Buscar
+        </button>
+    </div>
+
+    <div class="mt-3 d-flex align-items-center">
+        <label for="filterSelect" class="form-label me-2">Filtros:</label>
+        <select class="form-select" id="filterSelect" name="filter">
+            <option value="employee">Empleado</option>
+            <option value="years">Años</option>
+        </select>
+    </div>
+</form>
+
+{% endblock search %}
+
+{% block columns %}
+<div class="mb-3 d-flex align-items-center">
+    <label for="quickActions" class="form-label me-2">Acciones:</label>
+    <select class="form-select" id="quickActions" name="quickActions">
+        <option value="" selected="">---------</option>
+        {% if permissions.application_approve_boss %}
+            <option value="1">Cambiar aprobación solicitud (Jefe)</option>
+        {% endif %}
+        {% if permissions.application_approve_commission %}
+            <option value="2">Cambiar aprobación solicitud (Comision)</option>
+        {% endif %}
+    </select>
+
+    <button class="btn btn-outline-danger" id="quickActionsBtn" data-bs-toggle="tooltip"
+        data-bs-title="Seleccione una acción y click en el botón">
+        Aplicar
+    </button>
+</div>
+<tr class="text-primary">
+    <th class="text-primary text-center">Seleccionar</th>
+    <th class="text-primary text-center">Empleado</th>
+    <th class="text-primary text-center">Curso</th>
+    <th class="text-primary text-center">Año</th>
+    <th class="text-primary text-center">Aprobado</th>
+    <th class="text-warning text-center">Acciones</th>
+</tr>
+{% endblock %}
+
+{% block rows %}
+
+{% for application in applications %}
+<tr>
+    <td class="tex-center"><input class="form-check-input" type="checkbox" value="{{ application.id }}" id="flexCheckDefault"></td>
+    <td class="text-center">{{ application.employee|upper }}</td>
+    <td class="text-center">{{ application.course }}</td>
+    <td class="text-center">{{ application.year }}</td>
+    <td class="text-center">
+        {% if application.state %}
+            <i class='text-success bx bxs-check-circle' data-bs-toggle="tooltip" data-bs-title="La solicitud ha sido aprobada"></i>
+        {% else %}
+            <i class="bi bi-x-lg" data-bs-toggle="tooltip" data-bs-title="La solicitud puede estar aun en revision o no ha sido aprobada"></i>
+        {% endif %}
+    </td>
+    <td class="text-center">
+        {% if permissions.application_approve_boss %}
+            {% if application.approved_boss %}
+                <a class="text-warning" href="{% url 'personal_training:application_approve_boss' application.id %}" data-bs-toggle="tooltip" data-bs-title="Desaprobar solicitud Jefe">
+                    <i class='text-success bx bxs-check-circle'></i>
+                </a>
+            {% else %}
+                <a class="text-warning" href="{% url 'personal_training:application_approve_boss' application.id %}" data-bs-toggle="tooltip" data-bs-title="Aprobar solicitud Jefe">
+                    <i class='bx bx-checkbox'></i>
+                </a>
+            {% endif %}
+        {% endif %}
+
+        {% if permissions.application_approve_commission %}
+            {% if application.approved_commission %}
+                <a class="text-info" href="{% url 'personal_training:application_approve_commission' application.id %}" data-bs-toggle="tooltip" data-bs-title="Desaprobar solicitud Comision">
+                    <i class='text-success bx bxs-check-circle'></i>
+                </a>
+            {% else %}
+                <a class="text-info" href="{% url 'personal_training:application_approve_commission' application.id %}" data-bs-toggle="tooltip" data-bs-title="Aprobar solicitud Comision">
+                    <i class='bx bx-checkbox'></i>
+                </a>
+            {% endif %}
+        {% endif %}
+        {% if permissions.application_add_cost %}
+        <a class="text-success" href="{% url 'personal_training:application_set_cost' application.id %}" data-bs-toggle="tooltip" data-bs-title="Colocar precio"><i class="bi bi-cash"></i></a>
+        {% endif %}
+        <button rel="rel-detail" data-id="{{ application.id }}" type="button" class="text-info" data-bs-toggle="modal"
+            data-bs-target="#miModal">
+            <i class="bx bxs-detail"></i>
+        </button>
+
+        {% if permissions.change_application %}
+        <a class="text-success" href="{% url 'personal_training:application_update' application.id %}" data-bs-toggle="tooltip" data-bs-title="Editar el application"><i class="bi bi-pencil-fill"></i></a>
+        {% endif %}
+
+        {% if permissions.delete_application %}
+        <a class="text-danger" href="{% url 'personal_training:application_delete' application.id %}"
+            data-bs-toggle="tooltip" data-bs-title="Eliminar Solicitud"><i class="bi bi-x-circle-fill"></i></a>
+        {% endif %}
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="2" class="text-danger fw-bold h3 text-center">
+        <div class="py-2 mt-2 border border-1 shadow rounded text-center">
+            ¡No se encontraron datos que cumplan los criterios de búsqueda...!
+        </div>
+    </td>
+</tr>
+{% endfor%}
+{% endblock %}
+
+{% block modal%}
+<div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-bg-danger">
+                <h5 class="modal-title text-white " id="miModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body fw-bold text-dark text-uppercase" id="modal-body">
+                Contenido del modal. Aquí puedes agregar cualquier contenido que desees mostrar dentro del modal.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block file_js %}
+<script>
+    document.getElementById('quickActionsBtn').addEventListener('click', async (e) => {
+        const quickActions = document.getElementById('quickActions')
+        const quickActionsValue = quickActions.value
+        const checkboxes = document.querySelectorAll('#flexCheckDefault:checked');
+        if (checkboxes.length == 0) return alert("Seleccione al menos un registro")
+        if (quickActionsValue == 0) return alert("Seleccione una acción")
+        let ids = []
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                ids.push(checkbox.value)
+            }
+        })
+        let data = null;
+        switch (quickActionsValue) {
+            case '1':
+                data = await Promise.all(ids.map(async (id) => {
+                    const response = await fetchGet(`/personal_training/application/toggleapproveboss/${id}`, {});
+                    if (!response.ok) {
+                         console.error(`Error en la solicitud para ID ${id}: ${response.statusText}`);
+                    }
+                    return response;
+                }));
+                break;
+            case '2':
+                data = await Promise.all(ids.map(async (id) => {
+                    const response = await fetchGet(`/personal_training/application/toggleapprovecommission/${id}`, {});
+                    if (!response.ok) {
+                        console.error(`Error en la solicitud para ID ${id}: ${response.statusText}`);
+                    }
+                   return response;
+                }));
+                break;
+        }
+        location.reload();
+    });
+
+    document.getElementById('detalle').addEventListener('click', async (e) => {
+        const detail_btn = e.target.closest('button[rel=rel-detail]')
+        if (detail_btn) {
+            const data = await fetchGet(`/personal_training/application/details/?id=${detail_btn.dataset.id}`)
+            if (!data.ok) return alert("error en los datos")
+            let detail = data.data.detail
+            let {
+                employee,
+                course,
+                description,
+                approved_boss,
+                approved_commission,
+                state,
+                cost
+            } = data.data.application
+
+            approved_boss = (approved_boss) ? "Aprobado" : "Pendiente";
+            approved_commission = (approved_commission) ? "Aprobado" : "Pendiente";
+            state = (state) ? "✓" : "✗";
+            cost = (cost) ? cost : "Sin Costo";
+
+            document.getElementById('miModalLabel').innerHTML = `Detalle del Solicitud`
+            $body = document.getElementById('modal-body')
+            $body.innerHTML = `
+                <p><strong>Empleado:</strong> ${employee}</p>
+                <p><strong>Curso:</strong> ${course}</p>
+                <p><strong>Descripcion:</strong> ${description}</p>
+                <p><strong>Aprobado por Jefe:</strong> ${approved_boss}</p>
+                <p><strong>Aprobado por Comision:</strong> ${approved_commission}</p>
+                <p><strong>Estado:</strong> ${state}</p>
+                <p><strong>Costo:</strong> ${cost}</p>
+            `
+        }
+    });
+
+
+</script>
+{% endblock %}

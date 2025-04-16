@@ -1,0 +1,13 @@
+{% extends "components/base_form.html" %}
+{% block controls %}
+    {% for field in form.visible_fields %}
+     {% include "components/field.html" %}
+    {% endfor %}
+  
+    
+{% endblock %}
+   
+   
+
+
+

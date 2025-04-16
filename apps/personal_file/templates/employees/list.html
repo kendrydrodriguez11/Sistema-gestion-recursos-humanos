@@ -1,0 +1,55 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+   <form action="" style="max-width: 450px;">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar por apellido " name="q1" value="{{ request.GET.q1 }}">
+            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Escriba parte del apellido y click en buscar">
+                Buscar
+            </button>
+        </div>
+    </form>           
+{% endblock search %}
+{% block columns %}
+    <tr class="text-primary"> 
+        <th class="text-primary">Foto</th>
+        <th class="text-primary">Apellidos</th>
+        <th class="text-primary">Nombres</th>
+        <th class="text-primary">Dni</th>
+        <th class="text-primary">Direccion</th>
+        <th class="text-danger">Acciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+  
+    {% for item in employees %}
+        <tr>
+            <td><img src="{{item.get_image_url}}" width="50px"/></td>
+            <td>{{item.last_name|upper}}</td>
+            <td>{{item.firts_name|upper}}</td>
+            <td>{{item.dni}}</td>
+            <td>{{item.direction}}</td>
+            <td class="text-center ">
+                 {% if permissions.update_employee %}
+                     <a class="text-success" href="{% url 'personal_file:employee_update' item.id %}" data-bs-toggle="tooltip" data-bs-title="Editar el empleado"><i class="bi bi-pencil-fill"></i></a>
+                 {% endif %}
+                 {% if permissions.delete_employee %}
+                     <a class="text-danger" href="{% url 'personal_file:employee_delete' item.id %}" data-bs-toggle="tooltip" data-bs-title="Eliminar el empleado"><i class="bi bi-x-circle-fill"></i></a>
+                 {% endif %}
+            </td>
+        </tr>
+   
+        {% empty %}
+       <tr>
+            <td colspan="2" class="text-danger fw-bold h3 text-center">
+                <div class="py-2 mt-2 border border-1 shadow rounded text-center">
+                    ¡No se encontraron datos que cumplan los criterios de búsqueda...!
+                </div>   
+            </td>
+        </tr>
+    {% endfor%}  
+{% endblock %}
+
+
+

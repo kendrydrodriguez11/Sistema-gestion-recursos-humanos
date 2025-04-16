@@ -1,0 +1,51 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+   <form action="" style="max-width: 450px;">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar por cedula" name="q1" value="{{ request.GET.q1 }}">
+            <input type="text" class="form-control" placeholder="Buscar por apellido" name="q2" value="{{ request.GET.q2 }}">
+            <input type="text" class="form-control" placeholder="Buscar por email" name="q3" value="{{ request.GET.q3 }}">
+            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Escriba parte de la cedula, apellido, email y dar click en buscar">
+                Buscar
+            </button>
+        </div>
+    </form>           
+{% endblock search %}
+{% block columns %}
+    <tr > 
+        <th>Foto</th>
+        <th>Nombre</th>
+        <th>Cedula</th>
+        <th>UserName</th>
+        <th>Email</th>
+        <th>Direccion</th>
+        <th>Telefono</th>
+        <th class="text-danger">Acciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+    {% for item in users %}
+        <tr>
+            <td><img src="{{item.get_image_url}}" width="50px"/></td>
+            <td>{{item.get_full_name|upper}}</td>
+            <td>{{item.dni}}</td>
+            <td>{{item.username}}</td>
+            <td>{{item.email}}</td>
+            <td>{{item.direction}}</td>
+            <td>{{item.phone}}</td>
+            <td class="text-center ">
+                <a class="text-success" href="{% url 'security:user_update' item.id %}" data-bs-toggle="tooltip" data-bs-title="Editar el usuario"><i class="bi bi-pencil-fill"></i></a>
+                <a class="text-danger" href="{% url 'security:user_delete' item.id %}" data-bs-toggle="tooltip" data-bs-title="Eliminar el usuario"><i class="bi bi-x-circle-fill"></i></a>
+            </td>
+        </tr>
+        {% empty %}
+           {% include "components/empty.html" %}
+    {% endfor%}  
+{% endblock %}
+
+
+
+
+

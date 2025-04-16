@@ -1,0 +1,177 @@
+{% extends "components/base.html" %}
+{% load static%}
+{% block content %}
+     <!-- ======= Portfolio Section ======= -->
+    <section id="portfolio" class="portfolio section-bg bg-white ">
+      <div class="container" data-aos="fade-up">
+         <div class="section-title">
+            <h2 style="margin-left:-7px ;">Aplicaciones disponibles</h2>
+         </div>
+        <div class="row container  d-flex align-content-start justify-content-start gap-2 mb-5 py-5" data-aos="fade-up" data-aos-delay="200">
+         {% for menu_wrapper in menu_list %}
+            <div class="fs-4 fw-bold" style="color:#450ec4">
+                  <i class="{{menu_wrapper.menu.icon}}"></i>
+                   <span>{{menu_wrapper.menu.name}}</span>
+                   <hr style="color:blue;border-top: 1px solid">
+             </div>
+            
+             {% for group_modulo_permission in menu_wrapper.group_module_permission_list %}
+              <div class="col-auto portfolio-item filter-app">
+                <div class="portfolio-wrap">
+                  {% comment %} <img src="{% static 'assets/img/portfolio/ficha-del-personal.jpg' %}" class="img-fluid" alt=""> {% endcomment %}
+                <div class="icon">
+                  <i class="{{group_modulo_permission.module.icon}}"></i>
+                    <h5 class="fw-bold">{{group_modulo_permission.module.name}}</h5>
+                </div>
+                  <h6>{{group_module_permission.module.name}}</h6>
+                  <div class="portfolio-info">
+                    <h4>{{menu_wrapper.menu.name}}</h4>
+                    <p>{{group_modulo_permission.module.name}}</p>
+                    <div class="portfolio-links">
+                       <a href="{{group_modulo_permission.module.url }}"  title="Portfolio Details"><i class="bx bx-link"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             {% endfor %}
+         {% endfor %}
+         
+          {% comment %} <div class="col-auto portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/portfolio/seleccion-de-personal.webp' %}" class="img-fluid" alt="">
+               <h6>Seleccion del Personal</h6>
+              <div class="portfolio-info">
+                <h4>Seleccion</h4>
+                <p>Nuevos Empelados</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-2.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/portfolio/evaluacion-de-Personal.avif' %}" class="img-fluid" alt="">
+                <h6>Personal</h6>
+              <div class="portfolio-info">
+                <h4>Evaluacion</h4>
+                <p>Empleados Internos</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-3.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/portfolio/capacitacion-del-personal.avif' %}" class="img-fluid" alt="">
+               <h6>Capacitacion del Personal</h6>
+              <div class="portfolio-info">
+                <h4>Capacitacion</h4>
+                <p>Empleados Internos</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-4.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 2"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/portfolio/nomina-de-pagos.avif' %}" class="img-fluid" alt="">
+              <h6>Nomina de Pagos</h6>
+              <div class="portfolio-info">
+                <h4>Nomina</h4>
+                <p>Rol de Pagos</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-5.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 2"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/portfolio/vacaciones-de-personal.jpg' %}" class="img-fluid" alt="">
+              <h6>Vacaciones del Personal</h6>
+              <div class="portfolio-info">
+                <h4>Vacaciones</h4>
+                <p>Anuales</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-6.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 3"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/portfolio/prestamos-del-personal.avif' %}" class="img-fluid" alt="">
+              <h6>Prestamos del Personal</h6>
+              <div class="portfolio-info">
+                <h4>Prestamos</h4>
+                <p>Empleados Internos</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-7.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 1"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/portfolio/reloj-biometrico.webp' %}" class="img-fluid" alt="">
+               <h6>Asistencia del Personal</h6>
+              <div class="portfolio-info">
+                <h4>Asistencia</h4>
+                <p>Reloj Biométrico</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-8.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 3"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/portfolio/seguridad.avif' %}" class="img-fluid" alt="">
+              <h6>Roles de Usuarios</h6>
+              <div class="portfolio-info">
+                <h4>Seguridad</h4>
+                <p>Permisos de Usuarios</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-8.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 3"><i class="bx bx-plus"></i></a>
+                  <a href="{% url 'security:home' %}" ><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/portfolio/dashboard.avif' %}" class="img-fluid" alt="">
+               <h6>Analitica de Datos</h6>
+              <div class="portfolio-info">
+                <h4>Dashboard</h4>
+                <p>Analitica de Datos</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-9.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div> {% endcomment %}
+
+        </div>
+      </div>
+    </section><!-- End Portfolio Section -->
+{% endblock content %}
+

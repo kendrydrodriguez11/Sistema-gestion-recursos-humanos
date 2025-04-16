@@ -1,0 +1,49 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+   <form action="" style="max-width: 450px;">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar por nombre " name="q1" value="{{ request.GET.q1 }}">
+            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Escriba parte del nombre y click en buscar">
+                Buscar
+            </button>
+        </div>
+    </form>           
+{% endblock search %}
+{% block columns %}
+    <tr class="text-primary"> 
+        <th class="text-primary">Nombre</th>
+        <th class="text-primary">Icono</th>
+        <th class="text-danger">Acciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+  
+    {% for menu in menus %}
+        <tr>
+            <td>{{menu.name|upper}}</td>
+            <td class="text-center text-primary"><i class="{{menu.icon}}"></i></td>
+            <td class="text-center ">
+                 {% if permissions.update_menu %}
+                     <a class="text-success" href="{% url 'security:menu_update' menu.id %}" data-bs-toggle="tooltip" data-bs-title="Editar el menu"><i class="bi bi-pencil-fill"></i></a>
+                 {% endif %}
+                 {% if permissions.delete_menu %}
+                     <a class="text-danger" href="{% url 'security:menu_delete' menu.id %}" data-bs-toggle="tooltip" data-bs-title="Eliminar el menu"><i class="bi bi-x-circle-fill"></i></a>
+                 {% endif %}
+            </td>
+        </tr>
+   
+        {% empty %}
+       <tr>
+            <td colspan="2" class="text-danger fw-bold h3 text-center">
+                <div class="py-2 mt-2 border border-1 shadow rounded text-center">
+                    ¡No se encontraron datos que cumplan los criterios de búsqueda...!
+                </div>   
+            </td>
+        </tr>
+    {% endfor%}  
+{% endblock %}
+
+
+

@@ -1,0 +1,123 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+   <form action="" style="max-width: 450px;">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar por nombre " name="q1" value="{{ request.GET.q1 }}">
+            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Escriba parte del nombre y click en buscar">
+                Buscar
+            </button>
+        </div>
+    </form>           
+{% endblock search %}
+{% block columns %}
+    <tr class="text-primary"> 
+        <th class="text-primary">Cliente</th>
+        <th class="text-primary">Fecha</th>
+        <th class="text-primary">Total</th>
+        <th class="text-danger">Acciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+    {% for factura in facturas %}
+        <tr>
+            <td class="text-center">{{factura.cliente|upper}}</td>
+            <td class="text-center">{{factura.fecha}}</td>
+            <td class="text-center">{{factura.total}}</td>
+            <td class="text-center ">
+                <a class="text-warning" href="{% url 'gestion_venta:factura_print' factura.id %}" target="_blank" data-bs-toggle="tooltip" data-bs-title="Ver factura"><i class="bi bi-file-ruled"></i></a>
+                <a class="text-success" href="{% url 'gestion_venta:factura_update' factura.id %}" data-bs-toggle="tooltip" data-bs-title="Editar la factura"><i class="bi bi-pencil-fill"></i></a>
+                <a class="text-danger" href="{% url 'gestion_venta:factura_delete' factura.id %}" data-bs-toggle="tooltip" data-bs-title="Eliminar la factura"><i class="bi bi-x-circle-fill"></i></a>
+                <button rel="rel-detail" data-id="{{ factura.id }}" type="button" class="text-info" data-bs-toggle="modal"
+                    data-bs-target="#miModal">
+                    <i class="bx bxs-detail"></i>
+                </button>
+            </td>
+        </tr>
+        {% empty %}
+       <tr>
+            <td colspan="2" class="text-danger fw-bold h3 text-center">
+                <div class="py-2 mt-2 border border-1 shadow rounded text-center">
+                    ¡No se encontraron datos que cumplan los criterios de búsqueda...!
+                </div>   
+            </td>
+        </tr>
+    {% endfor%}  
+{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-bg-danger">
+                <h5 class="modal-title text-white " id="miModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body fw-bold text-dark text-uppercase" id="modal-body">
+                Contenido del modal. Aquí puedes agregar cualquier contenido que desees mostrar dentro del modal.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block file_js %}
+<script>
+    document.getElementById('detalle').addEventListener('click', async (e) => {
+        const detail_btn = e.target.closest('button[rel=rel-detail]')
+        if (detail_btn) {
+            const data = await fetchGet(`/gestion_venta/factura/details/?id=${detail_btn.dataset.id}`)
+            if (!data.ok) return alert("error en los datos")
+            document.getElementById('miModalLabel').innerHTML = `Detalle de la factura ${data.id}`
+            let detail = data.data.detail
+            let {
+                cliente,
+                fecha,
+                subtotal,
+                iva,
+                total,
+                detalle
+            } = data.data.factura
+            document.getElementById('miModalLabel').innerHTML = `Detalle del cliente`
+            $body = document.getElementById('modal-body')
+            $body.innerHTML = `
+                <div class="row">
+                    <div class="col-6">
+                        <p class="fw-bold">Cliente: ${cliente}</p>
+                        <p class="fw-bold">Fecha: ${fecha}</p>
+                    </div>
+                    <div class="col-6">
+                        <p class="fw-bold">Subtotal: ${subtotal}</p>
+                        <p class="fw-bold">Iva: ${iva}</p>
+                        <p class="fw-bold">Total: ${total}</p>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${detalle.map(d => `
+                            <tr>
+                                <td>${d.producto__name}</td>
+                                <td>${d.cantidad}</td>
+                                <td>${d.precio}</td>
+                                <td>${d.subtotal}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `
+        }
+    })
+</script>
+{% endblock %}

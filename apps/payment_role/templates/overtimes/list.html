@@ -1,0 +1,137 @@
+{% extends "components/base_list.html" %}
+{% load static%}
+{% block search %}
+   <form action="" style="max-width: 450px;">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar por nombre " name="q1" value="{{ request.GET.q1 }}">
+            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Escriba parte del nombre y click en buscar">
+                Buscar
+            </button>
+        </div>
+    </form>           
+{% endblock search %}
+{% block columns %}
+    <tr class="text-primary"> 
+        <th class="text-primary">Nomina</th>
+        <th class="text-danger">Sucursal</th>
+        <th class="text-primary">Empleado</th>
+        <th class="text-danger">Fecha Emision</th>
+        <th class="text-danger">Sobretiempo</th>
+        <th class="text-danger">Estado</th>
+        <th class="text-danger">Acciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+  
+    {% for item in overtimes %}
+        <tr>
+            <td>{{item.calendar.codigo_rol|upper}}</td>
+            <td>{{item.sucursal.name|upper}}</td>
+            <td>{{item.employee.get_full_name|upper}}</td>
+            <td>{{item.created_at|date:'Y-m-d'}}</td>
+            <td>{{item.total|stringformat:".2f"}}</td>
+            {% if item.processed %}
+               <td class="text-center text-primary"><i class='bx bxs-check-circle'></i></td>
+            {% else %}
+                <td class="text-center text-danger"><i class='bx bx-checkbox'></i></td>
+            {% endif %}
+             <td class="text-center ">
+                <button rel="rel-detail" data-id="{{item.id}}" type="button" class="text-info" data-bs-toggle="modal" data-bs-target="#miModal">
+                     <i class="bx bxs-detail"></i>
+                </button>
+        
+                {% if permissions.change_overtime %}
+                    {% if not item.processed   %}
+                      <a class="text-success" href="{% url 'payment_role:overtime_update' item.id %}" data-bs-toggle="tooltip" data-bs-title="Editar el sobretiempo"><i class="bi bi-pencil-fill"></i></a>
+                    {% endif %}
+                 {% endif %}
+                 {% if permissions.delete_overtime %}
+                      {% if not item.processed   %}
+                        <a class="text-danger" href="{% url 'payment_role:overtime_delete' item.id %}" data-bs-toggle="tooltip" data-bs-title="Eliminar el sobretiempo"><i class="bi bi-x-circle-fill"></i></a>
+                     {% endif %}
+                 {% endif %}
+            </td>
+        </tr>
+   
+        {% empty %}
+       <tr>
+            <td colspan="2" class="text-danger fw-bold h3 text-center">
+                <div class="py-2 mt-2 border border-1 shadow rounded text-center">
+                    ¡No se encontraron datos que cumplan los criterios de búsqueda...!
+                </div>   
+            </td>
+        </tr>
+    {% endfor%}  
+{% endblock %}
+{% block modal%}
+  <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header text-bg-danger">
+            <h5 class="modal-title text-white " id="miModalLabel"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body fw-bold text-dark text-uppercase" id="modal-body">
+            Contenido del modal. Aquí puedes agregar cualquier contenido que desees mostrar dentro del modal.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}
+{% block file_js %}
+
+ <script>
+     document.getElementById('detalle').addEventListener('click',async (e) => {
+        const fil = e.target.closest('button[rel=rel-detail]')
+       
+        if (fil){                                                                
+            const data = await fetchGet(`/payment_role/overtime/detail?id=${fil.dataset.id}`)
+            if (!data.ok) return alert("error en los datos")
+            let {calendar, empleado, sucursal, value_hour,total,proceso} =  data.data.overtime
+            let detail =  data.data.detail
+            proceso = (proceso) ? "Procesado" : "Pendiente";
+            trHoras=""
+            detail.forEach((hours) => {
+        
+            trHoras += `<tr>
+                    <td>${hours.des}</td>
+                    <td>${hours.fac}</td>
+                    <td>${hours.nh}</td>
+                    <td>💰${hours.vh}</td>
+                </tr>`
+            });
+            document.getElementById('miModalLabel').innerHTML = `Detalle del Sobretiempo:${calendar}`
+            $body = document.getElementById('modal-body')
+            $body.innerHTML = `
+            <h5>Empleado:${empleado} </h5>
+            <h6>Valor hora:💰${value_hour}</h6>
+            <h6>Estado:<span class="text-bg-danger">${proceso}<span>  </p>
+            <hr>
+            <section class="table-responsive" style="margin-top:-35px;margin-bottom: -35px;">
+            <table class="table table-hover table-fluid">
+            <thead class="text-center border-4 custom-header-rounded   ">
+                <tr class="text-info"> 
+                    <th class="text-info">Descripcion</th>
+                    <th class="text-info">Factor</th>
+                    <th class="text-info">NoHoras</th>
+                    <th class="text-info">Valor</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+              ${trHoras}  
+            </tbody>
+            </table>
+            <p class="d-flex justify-content-end fw-bold text-danger f-2 me-4">Total 💰${total}<p> 
+        </section>
+        `
+        }
+      
+     });
+ </script> 
+{% endblock %}
+
+

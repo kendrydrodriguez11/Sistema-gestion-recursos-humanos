@@ -1,0 +1,91 @@
+{% extends "components/base.html" %}
+{% load static%}
+{% block content %}
+     <!-- ======= Portfolio Section ======= -->
+    <section id="portfolio" class="portfolio section-bg">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+            <h2 style="margin-left:-7px ;">Menu Seguridad</h2>
+        </div>
+         <div class="row container d-flex align-content-between justify-content-between gap-5 mb-5 py-5" data-aos="fade-up" data-aos-delay="200">
+          <div class="col-auto portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/security/menus.png' %}" class="img-fluid" alt="">
+              <h6>Opciones del Menu</h6>
+              <div class="portfolio-info">
+                <h4>Menus</h4>
+                <p>Crud del Menu</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-1.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
+                  <a href="{% url 'security:menu_list' %}"   title="Detalle del menu"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/security/user.png' %}" class="img-fluid" alt="">
+                <h6>Paises</h6>
+              <div class="portfolio-info">
+                <h4>Pais</h4>
+                <p>Crud de Paises</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-2.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
+                  <a href="{% url 'security:country_list' %}"   title="Detalle de Paises"><i class="bx bx-link"></i></a>
+             
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/security/roles.png' %}" class="img-fluid" alt="">
+               <h6>Usuario</h6>
+              <div class="portfolio-info">
+                <h4>Usuario</h4>
+                <p>Crud de Usuario</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-3.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>
+                  <a href="{% url 'security:user_list' %}"   title="Detalle de Usuario"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/security/roles.png' %}" class="img-fluid" alt="">
+               <h6>Roles de Usuario</h6>
+              <div class="portfolio-info">
+                <h4>Roles</h4>
+                <p>Crud de Roles</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-3.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      
+          <div class="col-auto portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="{% static 'assets/img/security/analitica.png' %}" class="img-fluid" alt="">
+                <h6>Analitica de Datos</h6>
+              <div class="portfolio-info">
+                <h4>Dashboard</h4>
+                <p>Crud Analitica</p>
+                <div class="portfolio-links">
+                  <a href="{% static 'assets/img/portfolio/portfolio-9.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
+                  <a href="portfolio-details.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Portfolio Section -->
+{% endblock content %}
