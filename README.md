@@ -23,7 +23,7 @@ Seguridad: Gestión de usuarios, roles, permisos y menús.
 
 Gestión de Ventas (opcional): Categorías, productos, clientes y facturación.
 
-⚙️ Requisitos Previos
+⚙️ Requisitos Previos:
 
 Python 3.8 o superior
 
